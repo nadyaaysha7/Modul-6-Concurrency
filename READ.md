@@ -19,3 +19,6 @@ Perbedaan utamanya terletak pada kemampuan server untuk memberikan **umpan balik
 ![img.png](img.png)
 Milestone ini menerapkan validasi path request untuk memisahkan respons antara status `200 OK` (halaman valid) dan `404 NOT FOUND` (halaman tidak tersedia) menggunakan struktur `if/else`. Melalui *refactoring* berbasis prinsip **DRY**, logika pembacaan file dan pengiriman data diringkas agar tidak berulang, sehingga kode menjadi lebih bersih, mudah dipelihara, dan efisien karena penentuan status serta nama file dipisahkan dari proses eksekusi pengiriman responsnya.
 
+## Commit 4 Reflection Notes
+Masalah ini terjadi karena server saat ini bersifat single-threaded, yang berarti server hanya dapat memproses satu permintaan dalam satu waktu secara berurutan. Ketika endpoint /sleep diakses, perintah thread::sleep memblokir thread utama selama 10 detik, sehingga server tidak dapat menangani permintaan lain yang masuk (seperti akses ke halaman utama) hingga proses tersebut selesai. Fenomena ini menunjukkan keterbatasan server sinkron dalam menangani trafik secara bersamaan, di mana satu request yang lambat dapat melumpuhkan seluruh layanan bagi pengguna lain.
+
