@@ -22,3 +22,6 @@ Milestone ini menerapkan validasi path request untuk memisahkan respons antara s
 ## Commit 4 Reflection Notes
 Masalah ini terjadi karena server saat ini bersifat single-threaded, yang berarti server hanya dapat memproses satu permintaan dalam satu waktu secara berurutan. Ketika endpoint /sleep diakses, perintah thread::sleep memblokir thread utama selama 10 detik, sehingga server tidak dapat menangani permintaan lain yang masuk (seperti akses ke halaman utama) hingga proses tersebut selesai. Fenomena ini menunjukkan keterbatasan server sinkron dalam menangani trafik secara bersamaan, di mana satu request yang lambat dapat melumpuhkan seluruh layanan bagi pengguna lain.
 
+## Commit 5 Reflection Notes
+
+`ThreadPool` meningkatkan efisiensi server dengan menyediakan sejumlah *worker thread* siap pakai sejak awal untuk menangani koneksi secara paralel. Alih-alih membuat *thread* baru untuk setiap permintaan, server menggunakan sistem antrean melalui **mpsc channel**, di mana tugas dikirim ke saluran tersebut dan diambil oleh *worker* yang sedang menganggur. Implementasi ini mencegah pemborosan sumber daya sistem dan mengatasi masalah *blocking*, sehingga server dapat terus menerima koneksi baru meskipun salah satu *worker* sedang memproses tugas yang lambat (seperti simulasi `/sleep`).
