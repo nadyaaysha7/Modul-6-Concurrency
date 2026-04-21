@@ -8,3 +8,9 @@ Kedua, ada **.lines()** untuk membagi aliran data/ stream menjadi baris-baris te
 Ketiga, ada **.map(|result| result.unwrap())**, karena setiap baris hasil pembacaan bisa saja gagal/ error, kita melakukan `unwrap` untuk mengambil string aslinya.
 Keempat, ada **.take_while(|line| !line.is_empty())**, ini adalah HTTP Request yang selalu diakhiri dengan baris kosong. Kode ini memberitahu program untuk berhenti membaca setelah menemukan baris kosong tersebut agar tidak menunggu selamanya.
 Terakhir, ada **.collect()** yang mengumpulkan semua baris teks yang telah diproses ke dalam sebuah Vector (`Vec<_>`).
+
+## Commit 2 Reflection Notes
+
+![img_1.png](img_1.png)
+Perbedaan utamanya terletak pada kemampuan server untuk memberikan **umpan balik (response)** kepada klien. Jika sebelumnya fungsi hanya membaca dan mencetak isi *request* ke terminal, versi terbaru ini sudah bertindak sebagai web server fungsional yang membaca file fisik `hello.html`, menyusunnya ke dalam format protokol HTTP yang benar (lengkap dengan *status line* dan *header* `Content-Length`), lalu mengirimkan data tersebut kembali melalui jaringan menggunakan `stream.write_all`. Dengan perubahan ini, browser yang mengakses alamat server tersebut kini dapat merender dan menampilkan halaman HTML secara visual, bukan sekadar mengirim data ke ruang hampa.
+
